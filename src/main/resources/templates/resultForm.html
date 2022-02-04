@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="text-left">
+        <h2>oEmbed Test</h2>
+    </div>
+
+    <form action="result.html" th:action="@{/}" th:object="${searchForm}" method="post">
+        <div>
+            <input type="text" id="url" th:field="*{url}" th:errorclass="field-error" class=" form-control"
+                   placeholder="주소를 입력하세요">
+            <div th:if="${#fields?.hasGlobalErrors()}">
+                <p class="field-error" th:each="error : ${#fields.globalErrors()}" th:text="${error}">오류 메시지</p>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">검색</button>
+            </div>
+        </div>
+    </form>
+    <div>
+        <text>title</text> : <p th:text="${oembedResponse?.title}"></p>
+        <text>type</text> : <p th:text="${oembedResponse?.type}"></p>
+        <text>version</text> : <p th:text="${oembedResponse?.version}"></p>
+        <text>provider_name</text> : <p th:text="${oembedResponse?.providerName}"></p>
+        <text>provider_url</text> : <p th:text="${oembedResponse?.providerUrl}"></p>
+        <text>author_name</text> : <p th:text="${oembedResponse?.authorName}"></p>
+        <text>author_url</text> : <p th:text="${oembedResponse?.authorUrl}"></p>
+        <text>is_plus</text> : <p th:text="${oembedResponse?.isPlus}"></p>
+        <text>html<br>(640/480)</text> : <p th:utext="${oembedResponse?.html}"></p>
+        <text>width</text> : <p th:text="${oembedResponse?.width}"></p>
+        <text>height</text> : <p th:text="${oembedResponse?.height}"></p>
+        <text>duration(s)</text> : <p th:text="${oembedResponse?.duration}"></p>
+        <text>description</text> : <p th:text="${oembedResponse?.description}"></p>
+        <text>thumbnail_url<br>(640x480)</text> : <img th:src="${oembedResponse?.thumbnailUrl}" alt="null">
+        <text>thumbnail_width</text> : <p th:text="${oembedResponse?.thumbnailWidth}"></p>
+        <text>thumbnail_height</text> : <p th:text="${oembedResponse?.thumbnailHeight}"></p>
+        <text>thumbnail_url_with_play_bautton</text> : <img th:src="${oembedResponse?.thumbnailUrlWithPlayButton}" alt="null">
+        <text>upload_date</text> : <p th:text="${oembedResponse?.uploadDate}"></p>
+        <text>video_id</text> : <p th:text="${oembedResponse?.videoId}"></p>
+        <text>uri</text> : <p th:text="${oembedResponse?.uri}"></p>
+    </div>
+</div> <!-- /container -->
+</body>
+
+</html>
