@@ -34,7 +34,7 @@ public class OembedService {
     private static Map<String, OembedProvider> providers = new HashMap<>();
 
     /**
-     * 초기 providers 값을 담아주기 위한 함수
+     * providers 값을 담아주기 위한 함수
      * @throws IOException
      */
     @PostConstruct
@@ -50,7 +50,7 @@ public class OembedService {
             CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
             Gson create = new GsonBuilder()
                     .setLenient()
-                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES) //_로 표시
                     .create();
 
             String jsonString = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
@@ -60,7 +60,6 @@ public class OembedService {
                     oembedRequestProviders.stream()
                             .collect(Collectors.toMap(OembedProvider::getProviderUrl, Function.identity())));
         } catch (Exception e) {
-
         } finally {
             httpClient.close();
         }
@@ -88,13 +87,11 @@ public class OembedService {
      * @param requestUrl ex. https://vimeo.com/20097015
      * @param encode UTF-8
      * @return ex. https://vimeo.com/api/oembed?format=json&url=https://vimeo.com/20097015
-     * @throws MalformedURLException
+     * @throws MalformedURLException //URL, 프로토콜을 다루는 클래스에서 잘못된 인자로 프로토콜을 인식할수 없을떄 예외
      */
     public String getOembedUri(String requestUrl, String encode) throws MalformedURLException  {
         final String providerName = this.getProviderName(requestUrl);
 
-        // provider의 스키마값들을 stream으로 검색해보려 했으나
-        // 제공 endpoint url만으로 핸들할 수 있을 것 같아 스키마를 스트림으로 돌리진 않았다.
         OembedEndpoint endpoint = providers.entrySet()
                 .stream()
                 .filter(v->v.getKey().contains(providerName))
@@ -116,7 +113,6 @@ public class OembedService {
         }
         return endpointUrl;
     }
-
     /**
      * @param oembedUrl ex. https://vimeo.com/api/oembed?format=json&url=https://vimeo.com/20097015
      * @return OembedResponse
@@ -125,6 +121,7 @@ public class OembedService {
     public OembedResponse getOembedResponse(String oembedUrl) throws Exception {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
+            //  헤더에 json형식으로 엔티티에 저장
             HttpGet httpGet = new HttpGet(oembedUrl);
             httpGet.addHeader("Content-type", "application/json");
             CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
@@ -141,5 +138,4 @@ public class OembedService {
             httpClient.close();
         }
     }
-
 }
